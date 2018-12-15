@@ -15,7 +15,7 @@ public class hrrn {
 	/**
 	 * 返回排序好的队列
 	 * @param list
-	 * @return
+	 * @return list_W
 	 */
 	public static List<process> HRRN(List<process> list) {
 		List<process> list_W = new ArrayList<process>();

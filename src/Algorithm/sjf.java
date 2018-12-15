@@ -6,7 +6,7 @@ import java.util.List;
 import entity.process;
 
 /**
- * 短作业优先
+ * 非抢占短作业优先
  * @author kelo
  *
  */
@@ -15,7 +15,7 @@ public class sjf {
 	/**
 	 * 返回排序好的队列
 	 * @param list
-	 * @return
+	 * @return list_W
 	 */
 	public static List<process> SJF(List<process> list) {
 		List<process> list_W = new ArrayList<process>();
@@ -39,7 +39,7 @@ public class sjf {
 	 * 取出数组中对应元素的下标
 	 * @param priority
 	 * @param pri
-	 * @return
+	 * @return i 对应元素的下标
 	 */
 	public static int contain(int neededTime,int[] arr){
 		int i;
@@ -50,10 +50,11 @@ public class sjf {
 		}
 		return i;		
 	}
+	
 	/**
 	 * 冒泡排序
 	 * @param arr
-	 * @return
+	 * @return arr 排序好的数组
 	 */
 	public static int[] bubbleSort(int[] arr)
     {
