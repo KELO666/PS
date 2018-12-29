@@ -200,6 +200,9 @@ public class Util {
 		p.setServerTime(serverTime);//服务时间+1
 		if(p.getServerTime() == p.getNeededTime()){
 			p.setStatus("Finish");
+			p.setFinishTime(nowTime);
+			p.setWtTime((p.getFinishTime()-p.getArriveTime())/serverTime);
+			
 		}		
 	}
 }

@@ -52,6 +52,8 @@ public class rr {
 			p.setStatus("Finish");
 			waitTime = nowTime-p.getArriveTime()-p.getNeededTime();
 			p.setWaitTime(waitTime);
+			p.setFinishTime(nowTime);
+			p.setWtTime((p.getFinishTime()-p.getArriveTime())/serverTime);
 		}		
 	}
 }

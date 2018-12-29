@@ -7,6 +7,21 @@ public class process implements Comparable<process>{
 	int enterTime;//开始执行的时间
 	int neededTime;//需要的服务时间
 	int waitTime ;////等待时间=开始执行时间-到达时间
+	int finishTime;//执行结束时间
+	double wtTime;//带权周转时间
+	public double getWtTime() {
+		return wtTime;
+	}
+	public void setWtTime(double wtTime) {
+		this.wtTime = wtTime;
+	}
+	public int getFinishTime() {
+		return finishTime;
+	}
+	public void setFinishTime(int finishTime) {
+		this.finishTime = finishTime;
+	}
+
 	String status;//状态  Wait-等待  Run-执行  Finish-完成
 	
 	public String getName() {

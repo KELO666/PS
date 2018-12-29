@@ -1,5 +1,6 @@
 package Scheduling;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -50,7 +51,32 @@ public class Main {
 			time++;
 			if(n==1) break;
 		}
+		printsum(list_F);
 
+	}
+
+	/**
+	 * 输出最终结果
+	 * @param list_F
+	 */
+	private static void printsum(List<process> list_F) {
+		System.out.println("进程名" + "\t" + "\t完成时间" + "\t" + "\t周转时间" + "\t" + "\t带权周转时间");
+		double f = 0.00d;
+		for (int i = 0; i < list_F.size(); i++) {
+			String name = list_F.get(i).getName();
+			int finishTime = list_F.get(i).getFinishTime();
+			int turnoverTime = list_F.get(i).getFinishTime() - list_F.get(i).getArriveTime();
+			//float wtTime = list_F.get(i).getWtTime();
+			double wtTime = list_F.get(i).getWtTime();
+			String f2 = new DecimalFormat("0.00").format(wtTime);
+			f += list_F.get(i).getWtTime();
+			System.out.println(name + "\t" + "\t" + finishTime + "\t" + "\t" + turnoverTime + "\t" + "\t" + f2);
+		}
+		f = (double)(Math.round(f/5.00d*100))/100;
+		System.out.print("平均带权周转时间为：");
+		String f1 = new DecimalFormat("#.00").format(f);
+		System.out.println(f1);
+		
 	}
 
 }
