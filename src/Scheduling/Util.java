@@ -84,24 +84,44 @@ public class Util {
 	 * @param k
 	 * @param nowTime
 	 */
-	public static void W_TO_R(List<process> list_W,List<process> list_R,int k,int nowTime){
-		if(list_W.size()!=0){//目前仍有未执行的进程
+	public static List<process> W_TO_R(List<process> list_W,List<process> list_R,int k,int nowTime){
+		if(list_W.size()!=0||list_R.size()!=0){//目前仍有未执行的进程或执行队列中有进程在执行
 			if(k==1){
 				fcfs.FCFS(list_W);//先来先服务
 				if(list_R.size()==0){//目前没有进程正在执行
 					list_R.add(list_W.get(0));
 					list_W.remove(0);
-					run(list_R.get(0),nowTime);
 				}		
+				if(list_R.size()!=0){
+					run(list_R.get(0),nowTime);
+				}
 			}
 			if(k==2){
 				list_W = sjf.SJF(list_W);//抢占式短作业优先
 				if(list_R.size()!=0){//有进程正在执行
-					if(list_W.get(0).getNeededTime()<list_R.get(0).getNeededTime()){
-						list_R.add(list_W.get(0));
-						list_W.add(list_R.get(0));
-						list_W = sjf.SJF(list_W);//抢占式短作业优先
+					if(list_W.size()!=0){
+						if(list_W.get(0).getNeededTime()<list_R.get(0).getNeededTime()){
+							list_W.add(list_R.get(0));
+							list_R.remove(0);
+							list_R.add(list_W.get(0));
+							list_W.remove(0);
+							
+							for (int i = 0; i < list_W.size(); i++) {
+								list_W.get(i).setStatus("Wait");
+							}
+							System.out.println("设置完的list_W");
+						}
 					}
+				}else{
+					list_R.add(list_W.get(0));
+//					System.out.println("list_R");
+//					print(list_R);
+					list_W.remove(0);
+//					System.out.println("list_W");
+//					print(list_W);
+				}
+				if(list_R.size()!=0){
+					run(list_R.get(0),nowTime);
 				}
 			}
 			if(k==3){
@@ -109,6 +129,9 @@ public class Util {
 				if(list_R.size()==0){//目前没有进程正在执行
 					list_R.add(list_W.get(0));
 					list_W.remove(0);
+					//run(list_R.get(0),nowTime);
+				}
+				if(list_R.size()!=0){
 					run(list_R.get(0),nowTime);
 				}
 			}
@@ -117,13 +140,18 @@ public class Util {
 				if(list_R.size()==0){//目前没有进程正在执行
 					list_R.add(list_W.get(0));
 					list_W.remove(0);
+					//run(list_R.get(0),nowTime);
+				}
+				if(list_R.size()!=0){
 					run(list_R.get(0),nowTime);
 				}
 			}
 			if(k==5){
 				rr.rr(list_W, list_R, nowTime);//时间片轮转法
 			}
+			
 		}
+		return list_W;
 		
 	}
 	
@@ -147,6 +175,16 @@ public class Util {
 	}
 	
 	/**
+	 * 输出
+	 * @param list
+	 */
+	public static void print(List<process> list) {
+		for (int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i).toString());
+		}
+	}
+	
+	/**
 	 * 进程执行
 	 * @param p
 	 */
@@ -154,10 +192,12 @@ public class Util {
 		if(p.getServerTime() == 0&&p.getStatus().equals("Wait")) {//未执行的进程设置开始执行时间
 			p.setEnterTime(nowTime);
 			p.setWaitTime((p.getEnterTime()-p.getArriveTime()));//设置等待时间
+			p.setStatus("Run");
 		}
-		p.setStatus("Run");
+		
 		int serverTime = p.getServerTime();
-		p.setServerTime(serverTime++);//服务时间+1
+		serverTime++;
+		p.setServerTime(serverTime);//服务时间+1
 		if(p.getServerTime() == p.getNeededTime()){
 			p.setStatus("Finish");
 		}		

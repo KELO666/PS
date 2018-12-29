@@ -17,6 +17,8 @@ public class Main {
 		int k ;
 		int n = 0;
 		Util.init(list_n);//初始化普通序列
+		System.out.println("普通序列为：");
+		Util.print(list_n);
 		System.out.println("----------------------------------------------------");
 		System.out.println("请选择进程调度算法：");
 		System.out.println("1、先来先服务");
@@ -24,14 +26,29 @@ public class Main {
 		System.out.println("3、非抢占式短作业优先");
 		System.out.println("4、高响应比优先");
 		System.out.println("5、时间片轮转法");
+		System.out.println("----------------------------------------------------");
 		Scanner input = new Scanner(System.in);
 		k = input.nextInt();
+		if(k<1||k>5){
+			System.out.println("输入有误！");
+			main(null);
+		}
 		//System.out.println("6、返回上一层");
-		while(n==0){
+		while(true){
 			Util.n_TO_W(list_n,list_W,time);
-			Util.W_TO_R(list_W, list_R, k, time);
-			Util.R_TO_F(list_R, list_F);
+			list_W = Util.W_TO_R(list_W, list_R, k, time);
+			n = Util.R_TO_F(list_R, list_F);
+			System.out.println("*****************************************************");
+			System.out.println("当time="+time+"时 ");
+			System.out.println("就绪序列为：");
+			Util.print(list_W);
+			System.out.println("执行序列为：");
+			Util.print(list_R);
+			System.out.println("完成序列为：");
+			Util.print(list_F);
+			System.out.println("*****************************************************");
 			time++;
+			if(n==1) break;
 		}
 
 	}

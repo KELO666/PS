@@ -12,28 +12,26 @@ import entity.process;
  */
 public class rr {
 	public static void rr(List<process> list_W,List<process> list_R,int nowTime) {
-		if(list_W.size()!=0){//就绪队列中还有进程
+		if(list_W.size()!=0&&list_R.size()==0){//目前没有进程在执行
 			Collections.sort(list_W);//先来先服务
-		}
-		
-		if(list_R.size()==0||list_R.get(0).getStatus().equals("Run")){
-			if(list_W.size()!=0){
-				list_W.add(list_W.size(),list_R.get(0));//从执行队列加入到就绪队列末端
-				list_W.get(list_W.size()).setStatus("Wait");//从Run设置为Wait
-				list_R.remove(0);//从执行队列移除
-			}		
-		}
-		
-		if(list_W.size()!=0){//就绪队列中还有多个进程
 			list_R.add(list_W.get(0));
-			run(list_R.get(0),nowTime);
 			list_W.remove(0);
-		}
-		
-		if(list_W.size()==0 && list_R.get(0).getStatus().equals("Run")){//只剩最后一个进程未执行完
 			run(list_R.get(0),nowTime);
 		}
 		
+		if(list_R.size()!=0&&list_R.get(0).getStatus().equals("Run")){
+			if(list_W.size()!=0){
+				list_W.add(list_R.get(0));//从执行队列加入到就绪队列末端
+				list_W.get(list_W.size()-1).setStatus("Wait");//从Run设置为Wait
+				list_R.remove(0);//从执行队列移除
+				list_R.add(list_W.get(0));
+				list_W.remove(0);
+				run(list_R.get(0),nowTime);
+			}else{
+				run(list_R.get(0),nowTime);
+			}
+			
+		}	
 		
 	}
 	
@@ -48,7 +46,8 @@ public class rr {
 		}
 		p.setStatus("Run");
 		int serverTime = p.getServerTime();
-		p.setServerTime(serverTime++);//服务时间+1
+		serverTime++;
+		p.setServerTime(serverTime);//服务时间+1
 		if(p.getServerTime() == p.getNeededTime()){
 			p.setStatus("Finish");
 			waitTime = nowTime-p.getArriveTime()-p.getNeededTime();
